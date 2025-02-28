@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Study Hub</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="config.js"></script>
+    <script src="script.js" defer></script>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo"><h4>Study Hub</h4></div>
+            <div class="nav-links">
+                <a href="#" onclick="openModal('loginModal')" class="login-btn">Log In</a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Landing Page -->
+    <main id="landingPage">
+        <section class="intro">
+            <h1>Welcome to Study Hub</h1>
+            <p>Your all-in-one platform for efficient and organized study sessions.</p>
+        </section>
+
+        <section class="steps">
+            <h2>How to Get Started</h2>
+            <div class="step-container">
+                <div class="step"><h3>1. Create an Account</h3><p>Sign up to personalize your study experience.</p></div>
+                <div class="step"><h3>2. Set Study Goals</h3><p>Customize your learning path and objectives.</p></div>
+                <div class="step"><h3>3. Start Studying</h3><p>Use timers, tracking tools, and other study features.</p></div>
+            </div>
+        </section>
+
+        <section class="cta">
+            <h3>Ready to begin?</h3>
+            <div class="ctaButtons">
+                <a href="#" onclick="openModal('signupModal')" class="cta-btn">Sign Up</a>
+                <a href="#" onclick="openModal('loginModal')" class="cta-btn">Log In</a>
+            </div>
+        </section>
+    </main>
+
+    <!-- Authentication Modals -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('loginModal')">&times;</span>
+            <h2>Log In</h2>
+            <form id="loginForm" onsubmit="loginUser(event)">
+                <label for="login-email">Email:</label>
+                <input type="email" id="login-email" name="email" autocomplete="email" required>
+                
+                <label for="login-password">Password:</label>
+                <input type="password" id="login-password" name="password" autocomplete="current-password" required>
+                <button type="submit" class="modal-btn">Log In</button>
+            </form>            
+        </div>
+    </div>
+
+    <div id="signupModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('signupModal')">&times;</span>
+            <h2>Sign Up</h2>
+            <form id="signupForm" onsubmit="signupUser(event)">
+                <label for="signup-name">Name:</label>
+                <input type="text" id="signup-name" name="signup-name" required>
+            
+                <label for="signup-email">Email:</label>
+                <input type="email" id="signup-email" name="signup-email" required>
+            
+                <label for="signup-password">Password:</label>
+                <input type="password" id="signup-password" name="signup-password" required>
+                
+                <button type="submit" class="modal-btn">Sign Up</button>
+            </form>
+            
+        </div>
+    </div>
+
+    <!-- Dashboard -->
+    <section id="dashboard">
+        <header class="user-greeting">
+            <h2>Welcome, <span id="user-name">User</span>!</h2>
+            <p>Completed Study Sessions: <span id="completedSessions">0</span></p>
+        </header>
+
+        <aside class="sidebar">
+            <ul>
+                <li class="active"><a href="#" onclick="showSection('home-content', event)">🏠 Home</a></li>
+                <li><a href="#" onclick="showSection('study-goals', event)">🎯 Study Goals</a></li>
+                <li><a href="#" onclick="showSection('study-timer', event)">⏱️ Study Timer</a></li>
+                <li><a href="#" onclick="showSection('quizzes', event)">📝 Quizzes</a></li>
+                <li><a href="#" onclick="showSection('progress-tracker', event)">📊 Progress Tracker</a></li>
+                <li><a href="#" onclick="logout()">🚪 Logout</a></li>
+            </ul>
+        </aside>
+
+        <section class="dashboard-content">
+            <!-- Home Section -->
+            <div id="home-content">
+                <h2>Welcome to Study Hub</h2>
+                <p>Enhance your study sessions with AI-powered tools and progress tracking.</p>
+                <h2>Study Tools</h2>
+                <ul>
+                    <li>🎯 <strong>Study Goals:</strong> Set and accomplish your learning objectives.</li>
+                    <li>📌 <strong>Study Timer:</strong> Stay on track with focused sessions.</li>
+                    <li>📝 <strong>Quizzes:</strong> Test and improve your knowledge.</li>
+                    <li>📊 <strong>Progress Tracker:</strong> Monitor your study achievements.</li>
+                </ul>
+            </div>
+
+            <!-- Study Goals Section -->
+            <div id="study-goals">
+                <h3>🎯 Study Goals</h3>
+                <p>Set and track your study goals.</p>
+                <form id="goalForm" onsubmit="addGoal(event)">
+                    <label for="goal-input">New Goal</label>
+                    <input type="text" id="goal-input" name="goal" required>
+                    <button type="submit" class="goal-btn">Add Goal</button>
+                </form>
+                
+                <h4>Your Goals:</h4>
+                <ul id="goal-list"></ul>
+            </div>
+
+            <!-- Study Timer Section -->
+            <div id="study-timer">
+                <h3>⏱️ Study Timer</h3>
+                <p id="timer-display">25:00</p>
+                <button onclick="startTimer()" class="timer-btn">Start</button>
+                <button onclick="stopTimer()" class="timer-btn">Stop</button>
+                <button onclick="resetTimer()" class="timer-btn">Reset</button>
+                <button onclick="useBreak()" class="pomodoro-break-btn">Break</button>
+            </div>
+
+            <!-- Quiz Section -->
+            <div id="quizzes">
+                <h3>📝 Quiz</h3>
+                <div class="question">Loading question...</div>
+                <div class="options"></div>
+                <p id="result"></p>
+                <button id="quiz-btn" onclick="loadQuestion()">Next</button>
+            </div>
+            
+
+            <!-- Progress Tracker Section -->
+            <div id="progress-tracker">
+                <h2>📊 Progress Tracker</h2>
+                <p><strong>Study Sessions: </strong><span id="completedSessions">0</span></p>
+                <p><strong>Quiz Performance: </strong><span id="quizProgress">0 quizzes</span></p>
+                <p><strong>Goals Achieved: </strong><span id="goalProgress">No goals set</span></p>
+            </div>
+        </section>
+    </section>
+</body>
+</html>
