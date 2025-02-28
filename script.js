@@ -333,6 +333,7 @@ function generateQuizPrompt() {
 
 async function fetchAIResponse(prompt) {
     const url = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
+
     console.log(API_KEY);
     try {
         const response = await fetch(url, {
