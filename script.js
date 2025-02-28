@@ -332,13 +332,6 @@ function generateQuizPrompt() {
 }
 
 async function fetchAIResponse(prompt) {
-    const API_KEY = window.API_KEY;
-    if (!API_KEY) {
-        console.error("API_KEY is not defined. Make sure config.js is loaded before script.js.");
-    } else {
-        console.log("Loaded API Key:", API_KEY);
-    }
-
     const url = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
     console.log(API_KEY);
     try {
