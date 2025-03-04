@@ -332,33 +332,29 @@ function generateQuizPrompt() {
 }
 
 async function fetchAIResponse(prompt) {
-    const url = "/.netlify/functions/getApiKey";
+    const apiKeyResponse = await fetch('/.netlify/functions/getApiKey'); // Fetch the API key from the Netlify function
+    const apiKey = await apiKeyResponse.text(); // Get the API key from the response
 
+    const url = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+
+    console.log(apiKey); // To verify it's being fetched correctly
     try {
-        const response = await fetch(url);
-        const data = await response.json();
-        const apiKey = data.apiKey;
-
-        // Use the API key in the API request
-        const apiUrl = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
-
-        const apiResponse = await fetch(apiUrl, {
+        const response = await fetch(url, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(prompt)
         });
 
-        if (!apiResponse.ok) {
-            throw new Error(`API error: ${apiResponse.status} ${apiResponse.statusText}`);
+        if (!response.ok) {
+            throw new Error(`API error: ${response.status} ${response.statusText}`);
         }
 
-        return await apiResponse.json();
+        return await response.json();
     } catch (error) {
         console.error("Error fetching AI response:", error);
         throw error;
     }
 }
-
 
 function parseAIResponse(data) {
     if (!data.candidates || data.candidates.length === 0) {
