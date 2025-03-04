@@ -332,19 +332,28 @@ function generateQuizPrompt() {
 }
 
 async function fetchAIResponse(prompt) {
-    const apiKeyResponse = await fetch("/.netlify/functions/getApiKey");
-    const data = await apiKeyResponse.json();
-    const API_KEY = data.API_KEY;
-
-    if (!API_KEY) {
-        throw new Error("API Key is missing");
-    }
-
-    const url = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
-
-    console.log("API Key:", API_KEY);
-
     try {
+        // Fetch the API key from Netlify function
+        const keyResponse = await fetch("/.netlify/functions/getApiKey");
+
+
+        // Check if the key response is valid
+        if (!keyResponse.ok) {
+            throw new Error(`Failed to fetch API key: ${keyResponse.statusText}`);
+        }
+
+        // Extract the API key from the response
+        const data = await keyResponse.json();
+        const API_KEY = data.API_KEY;
+
+        if (!API_KEY) {
+            throw new Error("API Key is missing");
+        }
+
+        // Construct the API URL with the API key
+        const url = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
+
+        // Send the API request
         const response = await fetch(url, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -355,6 +364,7 @@ async function fetchAIResponse(prompt) {
             throw new Error(`API error: ${response.status} ${response.statusText}`);
         }
 
+        // Return the response JSON
         return await response.json();
     } catch (error) {
         console.error("Error fetching AI response:", error);
