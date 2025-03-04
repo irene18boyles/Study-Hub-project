@@ -332,9 +332,19 @@ function generateQuizPrompt() {
 }
 
 async function fetchAIResponse(prompt) {
+    // Fetch the API key from the Netlify function
+    const apiKeyResponse = await fetch("/.netlify/functions/getApiKey");
+    const data = await apiKeyResponse.json();
+    const API_KEY = data.API_KEY; // Store the API key here
+
+    if (!API_KEY) {
+        throw new Error("API Key is missing");
+    }
+
     const url = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
 
-    console.log(API_KEY);
+    console.log("API Key:", API_KEY); // Check if the API key is loaded
+
     try {
         const response = await fetch(url, {
             method: "POST",
@@ -352,6 +362,7 @@ async function fetchAIResponse(prompt) {
         throw error;
     }
 }
+
 
 function parseAIResponse(data) {
     if (!data.candidates || data.candidates.length === 0) {
