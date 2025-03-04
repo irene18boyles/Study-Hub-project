@@ -332,15 +332,9 @@ function generateQuizPrompt() {
 }
 
 async function fetchAIResponse(prompt) {
-    const API_KEY = await fetch("/.netlify/functions/getApiKey")
-        .then(res => res.text())
-        .catch(err => {
-            console.error("Error fetching API key:", err);
-            return "FALLBACK_API_KEY"; // Optional fallback
-        });
-
     const url = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
 
+    console.log(API_KEY);
     try {
         const response = await fetch(url, {
             method: "POST",
@@ -358,7 +352,6 @@ async function fetchAIResponse(prompt) {
         throw error;
     }
 }
-
 
 function parseAIResponse(data) {
     if (!data.candidates || data.candidates.length === 0) {
