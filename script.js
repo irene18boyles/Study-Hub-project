@@ -339,7 +339,6 @@ async function fetchAIResponse(prompt) {
         const data = await response.json();
         const apiKey = data.apiKey;
 
-        // Use the API key in the API request
         const apiUrl = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
 
         const apiResponse = await fetch(apiUrl, {
