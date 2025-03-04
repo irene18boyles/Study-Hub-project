@@ -332,10 +332,9 @@ function generateQuizPrompt() {
 }
 
 async function fetchAIResponse(prompt) {
-    // Fetch the API key from the Netlify function
     const apiKeyResponse = await fetch("/.netlify/functions/getApiKey");
     const data = await apiKeyResponse.json();
-    const API_KEY = data.API_KEY; // Store the API key here
+    const API_KEY = data.API_KEY;
 
     if (!API_KEY) {
         throw new Error("API Key is missing");
@@ -343,7 +342,7 @@ async function fetchAIResponse(prompt) {
 
     const url = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
 
-    console.log("API Key:", API_KEY); // Check if the API key is loaded
+    console.log("API Key:", API_KEY);
 
     try {
         const response = await fetch(url, {
